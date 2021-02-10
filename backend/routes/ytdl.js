@@ -33,9 +33,7 @@ routes.post("/", async(req,res)=>{
     video: { downloaded: 0, total: Infinity },
     merged: { frame: 0, speed: '0x', fps: 0 },
   };
-  var songinfo=await ytdl.getInfo(ref,{requestOptions:{
-    headers:{cookie:COOCKIE}
-  }});
+  var songinfo=await ytdl.getInfo(ref);
 
     let nombre = songinfo.videoDetails.title;
     nombre=removeEmojis(nombre);
@@ -54,22 +52,18 @@ routes.post("/", async(req,res)=>{
     
 if(op=='Video'){
   try{
-    ytdl.chooseFormat(songinfo.formats,{quality:`${quality}`,requestOptions:{
-      headers:{cookie:COOCKIE}
-    }});
+    ytdl.chooseFormat(songinfo.formats,{quality:`${quality}`});
   }catch(err){
     console.log(err);
     return res.send({op:false});
   }
-  const audio = ytdl(ref, { filter:'audioonly', quality: 'lowestaudio' ,requestOptions:{
-    headers:{cookie:COOCKIE}}})
+  const audio = ytdl(ref, { filter:'audioonly', quality: 'lowestaudio'})
   .on('progress', (_, downloaded, total) => {
     tracker.audio = { downloaded, total };
   }).on("error",(err)=>{
     console.log(err);
   });
-const video = ytdl(ref, { filter:'videoonly' , quality:`${quality}`,requestOptions:{
-  headers:{cookie:COOCKIE}} })
+const video = ytdl(ref, { filter:'videoonly' , quality:`${quality}`})
   .on('progress', (_, downloaded, total) => {
     tracker.video = { downloaded, total };
   }).on("error",(err)=>{
@@ -158,8 +152,7 @@ video.pipe(ffmpegProcess.stdio[5]);
   }).pipe(fs.createWriteStream(path.resolve(downloadsFolder(),`${nombre}.mp4`)));
 */    
 } if (op == 'Audio') {
-  ytdl(ref, { filter: 'audioonly' ,quality:'highestaudio',requestOptions:{
-    headers:{cookie:COOCKIE}}})
+  ytdl(ref, { filter: 'audioonly' ,quality:'highestaudio'})
     .on('progress', (_, downloaded, total) => {
       tracker.audio = { downloaded, total };
       io.to(id).emit("upload",{downloaded:(tracker.audio.downloaded/tracker.audio.total*100).toFixed(2)})
