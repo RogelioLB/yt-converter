@@ -8,7 +8,11 @@ const app=express();
 app.use(cors());
 
 var http = require('http').createServer(app);
-const io=require('socket.io')(http);
+const io=require('socket.io')(http,{
+    cors:{
+        origin:"*"
+    }
+});
 
 
 

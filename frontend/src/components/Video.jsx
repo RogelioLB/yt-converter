@@ -1,21 +1,15 @@
 import React,{useState,useEffect} from 'react';
 import ReactPlayer from 'react-player';
 import axios from 'axios';
-import {io} from 'socket.io-client';
+import io from 'socket.io-client';
 
 
 const Video = (props) =>{
 
-    const [id,setId] = useState(window.location.pathname.replace("/video/",""));
-    const [finish,setFinish] = useState(false);
-    const [nombre,setNombre] = useState("");
-    const [formato,setFormato] = useState("Audio");
-    const [calidad,setCalidad] = useState("");
-    const [downloaded,setDownloaded] = useState("");
-
     let ID;
+
     useEffect(()=>{
-        const socket = io().connect();
+        const socket = io("http://localhost:5000/");
         socket.on('connect',function(){
             ID=socket.id;
             console.log(ID)
@@ -30,10 +24,17 @@ const Video = (props) =>{
         });
     });
 
+    const [id,setId] = useState(window.location.pathname.replace("/video/",""));
+    const [finish,setFinish] = useState(false);
+    const [nombre,setNombre] = useState("");
+    const [formato,setFormato] = useState("Audio");
+    const [calidad,setCalidad] = useState("");
+    const [downloaded,setDownloaded] = useState("");
+
     function handleConvert(e){
         setDownloaded("0");
         setFinish(false);
-        axios.post("/url",{uri:id,id:ID,op:formato,quality:calidad}).then(res=>{
+        axios.post("http://localhost:5000/url",{uri:id,id:ID,op:formato,quality:calidad}).then(res=>{
             console.log(res.data);
             if(res.data.op === false){
                 alert("Parece que no esta disponible esa calidad.");

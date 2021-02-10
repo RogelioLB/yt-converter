@@ -155,6 +155,7 @@ video.pipe(ffmpegProcess.stdio[5]);
   ytdl(ref, { filter: 'audioonly' ,quality:'highestaudio'})
     .on('progress', (_, downloaded, total) => {
       tracker.audio = { downloaded, total };
+      console.log(tracker.audio);
       io.to(id).emit("upload",{downloaded:(tracker.audio.downloaded/tracker.audio.total*100).toFixed(2)})
     }).on('end',()=>{
       io.to(id).emit("Finish");
