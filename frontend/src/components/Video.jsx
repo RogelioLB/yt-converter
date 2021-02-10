@@ -9,7 +9,7 @@ const Video = (props) =>{
     let ID;
 
     useEffect(()=>{
-        const socket = io("http://localhost:5000/");
+        const socket = io("/");
         socket.on('connect',function(){
             ID=socket.id;
             console.log(ID)
@@ -34,7 +34,7 @@ const Video = (props) =>{
     function handleConvert(e){
         setDownloaded("0");
         setFinish(false);
-        axios.post("http://localhost:5000/url",{uri:id,id:ID,op:formato,quality:calidad}).then(res=>{
+        axios.post("/url",{uri:id,id:ID,op:formato,quality:calidad}).then(res=>{
             console.log(res.data);
             if(res.data.op === false){
                 alert("Parece que no esta disponible esa calidad.");
