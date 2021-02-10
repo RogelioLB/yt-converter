@@ -65,12 +65,16 @@ if(op=='Video'){
     headers:{cookie:COOCKIE}}})
   .on('progress', (_, downloaded, total) => {
     tracker.audio = { downloaded, total };
+  }).on("error",(err)=>{
+    console.log(err);
   });
 const video = ytdl(ref, { filter:'videoonly' , quality:`${quality}`,requestOptions:{
   headers:{cookie:COOCKIE}} })
   .on('progress', (_, downloaded, total) => {
     tracker.video = { downloaded, total };
-  });
+  }).on("error",(err)=>{
+    console.log(err);
+  })
 
 // Prepare the progress bar
 let progressbarHandle = null;
@@ -125,6 +129,8 @@ ffmpegProcess.on('close', () => {
   io.to(id).emit("Finish");
   process.stdout.write('\n\n\n\n');
   clearInterval(progressbarHandle);
+}).on("error",(err)=>{
+  console.log(err);
 });
 
 // Link streams
@@ -159,6 +165,8 @@ video.pipe(ffmpegProcess.stdio[5]);
       io.to(id).emit("upload",{downloaded:(tracker.audio.downloaded/tracker.audio.total*100).toFixed(2)})
     }).on('end',()=>{
       io.to(id).emit("Finish");
+    }).on("error",(err)=>{
+      console.log(err);
     }).pipe(fs.createWriteStream(path.resolve(__dirname,`../../frontend/build/files/${nombre}.mp3`)));
 }
 res.send({op:true,names:nombre,title:nombre});
