@@ -28,7 +28,7 @@ const Video = (props) =>{
             console.log("Finish")
             setFinish(true)
         });
-    },[downloaded]);
+    });
 
     function handleConvert(e){
         setDownloaded("0");
