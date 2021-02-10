@@ -47,9 +47,10 @@ const Video = (props) =>{
     }
     return(
         <div className="videoFrame p-top">
-            <div className="player">
-                {window.screen.width <= 900 ? <ReactPlayer url={`https://www.youtube.com/watch?v=${id}`} width="400px"/> : <ReactPlayer url={`https://www.youtube.com/watch?v=${id}`}/> }
+            <div className="iframe">
+                <ReactPlayer url={`https://www.youtube.com/watch?v=${id}`} controls={true}/> 
             </div>
+            <div className="down">
             <form>
                 <div className="form-group">
                     <label htmlFor="formato">Seleccionar formato:</label>
@@ -64,7 +65,7 @@ const Video = (props) =>{
                 {
                     formato === 'Video' ? 
                     <div className="form-group">
-                        <label htmlFor="calidad">Escoge calidad</label>
+                        <label htmlFor="calidad">Escoge calidad:</label>
                         <select id="calidad" name="calidad" onChange={e=>setCalidad(e.target.value)}>
                             <option value="135">480p</option>
                             <option value="136">720p</option>
@@ -75,11 +76,13 @@ const Video = (props) =>{
                     <React.Fragment></React.Fragment>
                 }
             </form>
-            
-            <button onClick={handleConvert} className="btn">Convert</button>
-            {
-                formato !== 'Audio' ? <a href={`/files/${nombre}.mkv`} download={`${nombre}.mkv`} className="btn" onClick={e=>window.location.reload()}>Descargar</a> : <a href={`/files/${nombre}.mp3`} download={`${nombre}.mp3`} className="btn" onClick={e=>window.location.reload()}>Descargar</a>
-            }
+            <div className="buttons">
+                <button onClick={handleConvert} className="btn">Convert</button>
+                {
+                    formato !== 'Audio' ? <a href={`/files/${nombre}.mkv`} download={`${nombre}.mkv`} className="btn" onClick={e=>window.location.reload()}>Descargar</a> : <a href={`/files/${nombre}.mp3`} download={`${nombre}.mp3`} className="btn" onClick={e=>window.location.reload()}>Descargar</a>
+                }
+            </div>
+            </div>
             {
                     downloaded !== '' 
                 ? 

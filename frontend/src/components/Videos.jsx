@@ -4,9 +4,9 @@ import {Link} from 'react-router-dom';
 
 const Videos = (props) =>{
     useEffect(()=>{
-        fetch(`https://youtube.googleapis.com/youtube/v3/search?key=AIzaSyBq03nMImRjM9Y0liidDvY5eZgzzjdGkas&part=snippet&q=${window.location.pathname.replace("/search/","")}&maxResults=20`).then(res=>res.json()).then(res=>{
-            console.log(res.items);
+        fetch(`https://youtube.googleapis.com/youtube/v3/search?key=AIzaSyBq03nMImRjM9Y0liidDvY5eZgzzjdGkas&part=snippet&q=${window.location.pathname.replace("/search/","")}&maxResults=20&type=video`).then(res=>res.json()).then(res=>{
             setVideos(res.items);
+            console.log(res.items)
         })
     },[])
 
@@ -19,8 +19,8 @@ const Videos = (props) =>{
                     return(
                         <div className="video" key={i}>
                             <Link to={`/video/${e.id.videoId}`}>
-                                <h2>{e.snippet.title}</h2>
                                 <img src={e.snippet.thumbnails.medium.url}></img>
+                                <h2>{e.snippet.title}</h2>
                             </Link>
                         </div>
                     )
